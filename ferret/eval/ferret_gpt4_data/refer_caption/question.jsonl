@@ -1,0 +1,40 @@
+{"question_id": 0, "image": "000000069138.jpg", "category": "refer_desc", "text": "What is the interaction between the object [0.621, 0.082, 0.772, 0.132] and its surroundings?"}
+{"question_id": 1, "image": "000000131138.jpg", "category": "refer_desc", "text": "What is the interaction between the object [0.183, 0.799, 0.326, 0.896] and its surrounding?"}
+{"question_id": 2, "image": "000000475150.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.288, 0.324, 0.572, 0.649] and its interaction with the surrounding areas?"}
+{"question_id": 3, "image": "000000356424.jpg", "category": "refer_desc", "text": "What is happening in the region [0.528, 0.254, 0.717, 0.666] and what is its relationship to the surrounding objects?"}
+{"question_id": 4, "image": "000000491090.jpg", "category": "refer_desc", "text": "What can be said about the region [0.102, 0.498, 0.329, 0.692] in relation to nearby objects or elements?"}
+{"question_id": 5, "image": "000000484415.jpg", "category": "refer_desc", "text": "What can be observed in the region [0.716, 0.192, 0.894, 0.550] and how does it interact with the surroundings?"}
+{"question_id": 7, "image": "000000184324.jpg", "category": "refer_desc", "text": "What is happening within the region [0.564, 0.771, 0.876, 0.991] and how is it related to the nearby objects?"}
+{"question_id": 8, "image": "000000341058.jpg", "category": "refer_desc", "text": "What is the object [0.619, 0.838, 0.633, 0.850] and what is its relationship with nearby objects?"}
+{"question_id": 9, "image": "000000184384.jpg", "category": "refer_desc", "text": "What can you tell about the objects found in the region [0.628, 0.120, 0.998, 0.389]?"}
+{"question_id": 10, "image": "000000259097.jpg", "category": "refer_desc", "text": "What can be said about the region [0.012, 0.520, 0.996, 0.631] in relation to the surrounding areas?"}
+{"question_id": 11, "image": "000000377882.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.242, 0.211, 0.302, 0.989] and its surrounding context?"}
+{"question_id": 12, "image": "000000415748.jpg", "category": "refer_desc", "text": "What can you tell about the object [0.084, 0.438, 0.727, 0.954] and its interaction with nearby objects?"}
+{"question_id": 13, "image": "000000408120.jpg", "category": "refer_desc", "text": "What can you see within the region [0.394, 0.565, 0.570, 0.718] and what is its interaction with nearby objects?"}
+{"question_id": 14, "image": "000000184400.jpg", "category": "refer_desc", "text": "What is the interaction between the object [0.602, 0.837, 0.696, 0.997] and its surrounding objects?"}
+{"question_id": 15, "image": "000000276018.jpg", "category": "refer_desc", "text": "What can you tell me about the region [0.071, 0.378, 0.498, 0.842] and its interactions with nearby objects?"}
+{"question_id": 16, "image": "000000376322.jpg", "category": "refer_desc", "text": "What is the interaction between objects in the region [0.668, 0.252, 0.909, 0.622]?"}
+{"question_id": 17, "image": "000000125472.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.201, 0.002, 0.940, 0.758] and its interaction with surrounding objects?"}
+{"question_id": 18, "image": "000000361551.jpg", "category": "refer_desc", "text": "Can you tell me about the interaction happening in the region [0.957, 0.616, 0.997, 0.670] and its context?"}
+{"question_id": 19, "image": "000000412240.jpg", "category": "refer_desc", "text": "What can be said about the region [0.002, 0.437, 0.720, 0.787] in terms of the surrounding objects and their interactions?"}
+{"question_id": 20, "image": "000000130566.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.630, 0.471, 0.682, 0.550] and its interaction with the surrounding environment?"}
+{"question_id": 21, "image": "000000421923.jpg", "category": "refer_desc", "text": "What is the relationship between the object [0.838, 0.774, 0.994, 0.974] and object [0.796, 0.462, 0.982, 0.550]?"}
+{"question_id": 22, "image": "000000513567.jpg", "category": "refer_desc", "text": "What is happening in the region [0.926, 0.253, 0.998, 0.645]?"}
+{"question_id": 23, "image": "000000543300.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.414, 0.691, 0.662, 0.725] and how it relates to the surroundings?"}
+{"question_id": 24, "image": "000000241668.jpg", "category": "refer_desc", "text": "What is happening in the region [0.487, 0.136, 0.808, 0.986]?"}
+{"question_id": 25, "image": "000000535578.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.189, 0.032, 0.703, 0.178] and its surrounding areas?"}
+{"question_id": 26, "image": "000000277051.jpg", "category": "refer_desc", "text": "Describe the bird [0.384, 0.372, 0.698, 0.787] and its interactions with surrounding objects?"}
+{"question_id": 27, "image": "000000018519.jpg", "category": "refer_desc", "text": "What are the details of the region [0.279, 0.524, 0.341, 0.570] and how does it relate to the nearby objects?"}
+{"question_id": 28, "image": "000000106048.jpg", "category": "refer_desc", "text": "Can you describe what's happening in the region [0.222, 0.144, 0.820, 0.757]?"}
+{"question_id": 29, "image": "000000058393.jpg", "category": "refer_desc", "text": "What can you say about the interaction between objects in the region [0.542, 0.343, 0.812, 0.493]?"}
+{"question_id": 30, "image": "000000010764.jpg", "category": "refer_desc", "text": "Referencing the region [0.546, 0.625, 0.626, 0.801], can you describe what you see and how it interacts with the surrounding context?"}
+{"question_id": 31, "image": "000000271402.jpg", "category": "refer_desc", "text": "What can you tell me about the region [0.060, 0.086, 0.462, 0.908] and its relation to nearby objects?"}
+{"question_id": 32, "image": "000000273493.jpg", "category": "refer_desc", "text": "What is happening in the region [0.588, 0.327, 0.850, 0.703] with regard to its surroundings?"}
+{"question_id": 33, "image": "000000360960.jpg", "category": "refer_desc", "text": "Can you describe the region [0.524, 0.740, 0.734, 0.856] and its interaction with the surroundings?"}
+{"question_id": 34, "image": "000000452122.jpg", "category": "refer_desc", "text": "What is happening in the region [0.650, 0.428, 0.858, 0.600]?"}
+{"question_id": 35, "image": "000000134722.jpg", "category": "refer_desc", "text": "What can you say about the region [0.320, 0.451, 0.460, 0.592] and its relation with nearby objects?"}
+{"question_id": 36, "image": "000000039484.jpg", "category": "refer_desc", "text": "What is happening in the region [0.844, 0.777, 0.958, 0.897] and how does this relate to the surrounding area?"}
+{"question_id": 37, "image": "000000159311.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.206, 0.853, 0.356, 0.982] considering the surrounding entities and their interactions?"}
+{"question_id": 38, "image": "000000326174.jpg", "category": "refer_desc", "text": "Can you describe the interaction or relationship between the objects in the region [0.444, 0.459, 0.552, 0.853]?"}
+{"question_id": 39, "image": "000000562207.jpg", "category": "refer_desc", "text": "Can you describe what's happening in the region [0.154, 0.392, 0.300, 0.964] and how it relates to nearby objects or individuals?"}
+{"question_id": 40, "image": "000000332318.jpg", "category": "refer_desc", "text": "What can you tell about the region [0.436, 0.860, 0.454, 0.890] and how does it relate to the rest of the scene?"}
