@@ -216,7 +216,7 @@ def clear_history(request: gr.Request):
     logger.info(f"clear_history. ip: {request.client.host}")
     state = default_conversation.copy()
     return (state, state.to_gradio_chatbot(), "", None, None) + (disable_btn,) * 5 + \
-        (None, {'region_placeholder_tokens':[],'region_coordinates':[],'region_masks':[],'masks':[]}, [], None)
+        (None, {'region_placeholder_tokens':[],'region_coordinates':[],'region_masks':[],'region_masks_in_prompts':[],'masks':[]}, [], None)
 
 
 def resize_bbox(box, image_w=None, image_h=None, default_wh=VOCAB_IMAGE_W):
@@ -321,7 +321,26 @@ def post_process_code(code):
     return code
 
 
+def find_indices_in_order(str_list, STR):
+    indices = []
+    i = 0
+    while i < len(STR):
+        for element in str_list:
+            if STR[i:i+len(element)] == element:
+                indices.append(str_list.index(element))
+                i += len(element) - 1
+                break
+        i += 1
+    return indices
+
+
 def format_region_prompt(prompt, refer_input_state):
+    # Find regions in prompts and assign corresponding region masks
+    refer_input_state['region_masks_in_prompts'] = []
+    indices_region_placeholder_in_prompt = find_indices_in_order(refer_input_state['region_placeholder_tokens'], prompt)
+    refer_input_state['region_masks_in_prompts'] = [refer_input_state['region_masks'][iii] for iii in indices_region_placeholder_in_prompt]
+
+    # Find regions in prompts and replace with real coordinates and region feature token.
     for region_ph_index, region_ph_i in enumerate(refer_input_state['region_placeholder_tokens']):
         prompt = prompt.replace(region_ph_i, '{} {}'.format(refer_input_state['region_coordinates'][region_ph_index], DEFAULT_REGION_FEA_TOKEN))
     return prompt
@@ -341,6 +360,32 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, refer_in
     if len(state.messages) == state.offset + 2:
         # First round of conversation
         template_name = 'ferret_v1'
+        # Below is LLaVA's original templates.
+        # if "llava" in model_name.lower():
+        #     if 'llama-2' in model_name.lower():
+        #         template_name = "llava_llama_2"
+        #     elif "v1" in model_name.lower():
+        #         if 'mmtag' in model_name.lower():
+        #             template_name = "v1_mmtag"
+        #         elif 'plain' in model_name.lower() and 'finetune' not in model_name.lower():
+        #             template_name = "v1_mmtag"
+        #         else:
+        #             template_name = "llava_v1"
+        #     elif "mpt" in model_name.lower():
+        #         template_name = "mpt"
+        #     else:
+        #         if 'mmtag' in model_name.lower():
+        #             template_name = "v0_mmtag"
+        #         elif 'plain' in model_name.lower() and 'finetune' not in model_name.lower():
+        #             template_name = "v0_mmtag"
+        #         else:
+        #             template_name = "llava_v0"
+        # elif "mpt" in model_name:
+        #     template_name = "mpt_text"
+        # elif "llama-2" in model_name:
+        #     template_name = "llama_2"
+        # else:
+        #     template_name = "vicuna_v1"
         new_state = conv_templates[template_name].copy()
         new_state.append_message(new_state.roles[0], state.messages[-2][1])
         new_state.append_message(new_state.roles[1], None)
@@ -386,8 +431,8 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, refer_in
     }
     logger.info(f"==== request ====\n{pload}")
     if args.add_region_feature:
-        pload['region_masks'] = refer_input_state['region_masks']
-        logger.info(f"==== add region_masks to request ====\n")
+        pload['region_masks'] = refer_input_state['region_masks_in_prompts']
+        logger.info(f"==== add region_masks_in_prompts to request ====\n")
 
     pload['images'] = state.get_images()
     print(f'Input Prompt: {prompt}')
@@ -439,8 +484,8 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, refer_in
 
 title_markdown = ("""
 # 🦦 Ferret: Refer and Ground Anything Anywhere at Any Granularity
-[[Code](https://github.com/apple/ml-ferret)] [[Paper](https://arxiv.org/abs/2310.07704)] 
 """)
+# [[Project Page]](https://llava-vl.github.io) [[Paper]](https://arxiv.org/abs/2304.08485)
 
 tos_markdown = ("""
 ### Terms of use
@@ -554,6 +599,7 @@ def draw(input_mode, input, refer_input_state, refer_text_show, imagebox_refer):
     refer_input_state['region_placeholder_tokens'].append(cur_region_token)
     refer_input_state['region_coordinates'].append(cur_region_coordinates)
     refer_input_state['region_masks'].append(cur_region_masks)
+    assert len(refer_input_state['region_masks']) == len(refer_input_state['region_coordinates']) == len(refer_input_state['region_placeholder_tokens'])
     refer_text_show.append((cur_region_token, ''))
 
     # Show Parsed Referring.
@@ -597,6 +643,7 @@ def build_demo(embed_mode):
                 refer_input_state = gr.State({'region_placeholder_tokens':[],
                                               'region_coordinates':[],
                                               'region_masks':[],
+                                              'region_masks_in_prompts':[],
                                               'masks':[],
                                               })
                 refer_text_show = gr.HighlightedText(value=[], label="Referring Input Cache")

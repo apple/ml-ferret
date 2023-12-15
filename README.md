@@ -30,11 +30,12 @@ Key Contributions:
 
 
 ## Release
-- [10/30] 🔥 We released the code of **FERRET** model.
+- [12/14] 🔥 We released the [checkpoints(7B, 13B)](#checkpoints).
+- [10/30] 🔥 We released the code of **FERRET** model and [Ferret-Bench](ferret/eval/ferret_gpt4_data).
 
 
 
-**Usage and License Notices**: The data, and code is intended and licensed for research use only. They are also restricted to uses that follow the license agreement of LLaMA, Vicuna and GPT-4. The dataset is CC BY NC 4.0 (allowing only non-commercial use) and models trained using the dataset should not be used outside of research purposes.
+**Usage and License Notices**: The data, and code is intended and licensed for research use only. They are also restricted to uses that follow the license agreement of LLaMA, Vicuna and GPT-4. The dataset is CC BY NC 4.0 (allowing only non-commercial use) and models trained using the dataset should not be used outside of research purposes. 
 
 ## Contents
 - [Install](#install)
@@ -94,6 +95,25 @@ The scripts are provided ([7B](experiments/ferret_7b_train.sh), [13B](experiment
 ## Evaluation
 
 Please see this [doc](EVAL.md) for the details.
+
+## Checkpoints
+We extracted the `delta` between our pre-trained model and Vicuna. Please first download weights of Vicuna following the [previous instruction](#prepare-vicuna-checkpoint-and-llavas-projector). Then download our prepared offsets of weights: [7B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-7b/ferret-7b-delta.zip), [13B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-13b/ferret-13b-delta.zip) using `wget` or `curl`, and unzip the downloaded offsets. Lastly, apply the offset to the Vicuna's weight by running the following script:
+```Shell
+# 7B
+python3 -m ferret.model.apply_delta \
+    --base ./model/vicuna-7b-v1-3 \
+    --target ./model/ferret-7b-v1-3 \
+    --delta path/to/ferret-7b-delta
+# 13B
+python3 -m ferret.model.apply_delta \
+    --base ./model/vicuna-13b-v1-3 \
+    --target ./model/ferret-13b-v1-3 \
+    --delta path/to/ferret-13b-delta
+```
+
+**Notices**: Apple's rights in the attached weight differentials are hereby licensed under the CC-BY-NC license. Apple makes no representations with regards to LLaMa or any other third party software, which are subject to their own terms.
+
+Please refer to the next section about how to set up a local demo with pre-trained weight.
 
 ## Demo
 
