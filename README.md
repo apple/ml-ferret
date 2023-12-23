@@ -45,13 +45,13 @@ Key Contributions:
 
 ## Install
 
-1. Clone this repository and navigate to FERRET folder
+1. Clone this repository and navigate to the `ml-ferret` folder
 ```bash
 git clone https://github.com/apple/ml-ferret
 cd ml-ferret
 ```
 
-2. Install Package
+2. Install Package and Environment
 ```Shell
 conda create -n ferret python=3.10 -y
 conda activate ferret
@@ -97,7 +97,7 @@ The scripts are provided ([7B](experiments/ferret_7b_train.sh), [13B](experiment
 Please see this [doc](EVAL.md) for the details.
 
 ## Checkpoints
-We extracted the `delta` between our pre-trained model and Vicuna. Please first download weights of Vicuna following the [previous instruction](#prepare-vicuna-checkpoint-and-llavas-projector). Then download our prepared offsets of weights: [7B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-7b/ferret-7b-delta.zip), [13B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-13b/ferret-13b-delta.zip) using `wget` or `curl`, and unzip the downloaded offsets. Lastly, apply the offset to the Vicuna's weight by running the following script:
+We extracted the `delta` between our pre-trained model and Vicuna. Please first download the Vicuna weights following the [previous instruction](#prepare-vicuna-checkpoint-and-llavas-projector). Then download our prepared offsets of weights: [7B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-7b/ferret-7b-delta.zip), [13B](https://docs-assets.developer.apple.com/ml-research/models/ferret/ferret-13b/ferret-13b-delta.zip) using `wget` or `curl`, and unzip the downloaded offsets. Lastly, apply the offsets to Vicuna's weights by running the following script:
 ```Shell
 # 7B
 python3 -m ferret.model.apply_delta \
@@ -124,14 +124,14 @@ To run our demo, you need to train FERRET and use the checkpoints locally. Gradi
 python -m ferret.serve.controller --host 0.0.0.0 --port 10000
 ```
 
-#### Launch a gradio web server.
+#### Launch a gradio web server
 ```Shell
 python -m ferret.serve.gradio_web_server --controller http://localhost:10000 --model-list-mode reload --add_region_feature
 ```
 
 #### Launch a model worker
 
-This is the worker that load the ckpt and do the inference on the GPU.  Each worker is responsible for a single model specified in `--model-path`.
+This is the worker that loads the ckpt and does the inference on the GPU.  Each worker is responsible for a single model specified in `--model-path`.
 
 ```Shell
 CUDA_VISIBLE_DEVICES=0 python -m ferret.serve.model_worker --host 0.0.0.0 --controller http://localhost:10000 --port 40000 --worker http://localhost:40000 --model-path ./checkpoints/FERRET-13B-v0 --add_region_feature
