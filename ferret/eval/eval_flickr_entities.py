@@ -55,7 +55,7 @@ def decode_bbox_from_caption(text, img_w, img_h, verbose=False):
             start = i + 1
             
             # Convert box string to list of integers
-            box_list = list(map(int, box.split(',')))
+            box_list = [int(coord) for coord in box.split(',')]
             resized_box_list = resize_bbox(box_list, img_w, img_h)
             entities.append(entity)
             boxes.append(resized_box_list)
