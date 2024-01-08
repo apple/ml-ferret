@@ -18,7 +18,7 @@ import numpy as np
 import requests
 import uvicorn
 
-from ferret.constants import CONTROLLER_HEART_BEAT_EXPIRATION
+from ferret.constants import CONTROLLER_HEART_BEAT_EXPIRATION, TIMEOUT
 from ferret.utils import build_logger, server_error_msg
 
 
@@ -87,7 +87,7 @@ class Controller:
 
     def get_worker_status(self, worker_name: str):
         try:
-            r = requests.post(worker_name + "/worker_get_status", timeout=5)
+            r = requests.post(worker_name + "/worker_get_status", timeout=TIMEOUT)
         except requests.exceptions.RequestException as e:
             logger.error(f"Get status fails: {worker_name}, {e}")
             return None
@@ -202,7 +202,7 @@ class Controller:
 
         try:
             response = requests.post(worker_addr + "/worker_generate_stream",
-                json=params, stream=True, timeout=5)
+                json=params, stream=True, timeout=TIMEOUT)
             for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
                 if chunk:
                     yield chunk + b"\0"

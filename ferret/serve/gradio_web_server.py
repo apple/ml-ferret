@@ -14,7 +14,7 @@ import requests
 
 from ferret.conversation import (default_conversation, conv_templates,
                                    SeparatorStyle)
-from ferret.constants import LOGDIR
+from ferret.constants import LOGDIR, TIMEOUT
 from ferret.utils import (build_logger, server_error_msg,
     violates_moderation, moderation_msg)
 import hashlib
@@ -443,7 +443,7 @@ def http_bot(state, model_selector, temperature, top_p, max_new_tokens, refer_in
     try:
         # Stream output
         response = requests.post(worker_addr + "/worker_generate_stream",
-            headers=headers, json=pload, stream=True, timeout=10)
+            headers=headers, json=pload, stream=True, timeout=TIMEOUT)
         for chunk in response.iter_lines(decode_unicode=False, delimiter=b"\0"):
             if chunk:
                 data = json.loads(chunk.decode())

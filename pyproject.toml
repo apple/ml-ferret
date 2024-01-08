@@ -20,7 +20,7 @@ dependencies = [
     "deepspeed==0.9.5",
     "peft==0.4.0",
     "transformers @ git+https://github.com/huggingface/transformers.git@cae78c46",
-    "accelerate==0.21.0",
+    "accelerate==0.25.0",
     "bitsandbytes==0.41.0",
     "scikit-learn==1.2.2",
     "sentencepiece==0.1.99",

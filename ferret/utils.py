@@ -6,7 +6,7 @@ import sys
 
 import requests
 
-from ferret.constants import LOGDIR
+from ferret.constants import LOGDIR, TIMEOUT
 
 server_error_msg = "**NETWORK ERROR DUE TO HIGH TRAFFIC. PLEASE REGENERATE OR REFRESH THIS PAGE.**"
 moderation_msg = "YOUR INPUT VIOLATES OUR CONTENT MODERATION GUIDELINES. PLEASE TRY AGAIN."
@@ -110,7 +110,7 @@ def violates_moderation(text):
     data = "{" + '"input": ' + f'"{text}"' + "}"
     data = data.encode("utf-8")
     try:
-        ret = requests.post(url, headers=headers, data=data, timeout=5)
+        ret = requests.post(url, headers=headers, data=data, timeout=TIMEOUT)
         flagged = ret.json()["results"][0]["flagged"]
     except requests.exceptions.RequestException as e:
         flagged = False
