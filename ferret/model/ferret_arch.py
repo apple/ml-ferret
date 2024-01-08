@@ -659,7 +659,8 @@ class FERRETMetaForCausalLM(ABC):
                     p.requires_grad = False
 
             if model_args.pretrain_mm_mlp_adapter:
-                mm_projector_weights = torch.load(model_args.pretrain_mm_mlp_adapter, map_location='cpu')
+                device = get_device()
+                mm_projector_weights = torch.load(model_args.pretrain_mm_mlp_adapter, map_location=device)
                 embed_tokens_weight = mm_projector_weights['model.embed_tokens.weight']
                 if add_region_feature:
                     num_new_tokens = num_new_tokens - num_region_fea_tokens

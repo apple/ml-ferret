@@ -21,9 +21,10 @@ import torch
 import uvicorn
 from functools import partial
 
-from ferret.constants import WORKER_HEART_BEAT_INTERVAL
+from ferret.constants import WORKER_HEART_BEAT_INTERVAL, TIMEOUT
 from ferret.utils import (build_logger, server_error_msg,
     pretty_print_semaphore)
+from ferret.model.device_selector import get_device
 from ferret.model.builder import load_pretrained_model
 from ferret.mm_utils import process_images, load_image_from_base64, tokenizer_image_token, KeywordsStoppingCriteria
 from ferret.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
@@ -80,6 +81,10 @@ class ModelWorker:
         self.tokenizer, self.model, self.image_processor, self.context_len = load_pretrained_model(
             model_path, model_base, self.model_name, load_8bit, load_4bit)
         self.is_multimodal = 'llava' in self.model_name.lower() or 'ferret' in self.model_name.lower()
+        self.device = get_device()
+
+        logger.info(f"Device is {self.device}")
+        logger.info(f"Model device is {self.model.device}.")
 
         if not no_register:
             self.register_to_controller()
@@ -110,7 +115,7 @@ class ModelWorker:
             try:
                 ret = requests.post(url, json={
                     "worker_name": self.worker_addr,
-                    "queue_length": self.get_queue_length()}, timeout=5)
+                    "queue_length": self.get_queue_length()}, timeout=TIMEOUT)
                 exist = ret.json()["exist"]
                 break
             except requests.exceptions.RequestException as e:
@@ -177,7 +182,7 @@ class ModelWorker:
 
         if region_masks is not None:
             assert self.add_region_feature
-            region_masks = [[torch.Tensor(region_mask_i).cuda().half() for region_mask_i in region_masks]]
+            region_masks = [[torch.Tensor(region_mask_i).to(self.device).half() for region_mask_i in region_masks]]
             image_args["region_masks"] = region_masks
             logger.info("Add region_masks to image_args.")
         else:
@@ -211,15 +216,15 @@ class ModelWorker:
         for i in range(max_new_tokens):
             if i == 0:
                 out = model(
-                    torch.as_tensor([input_ids]).cuda(),
+                    torch.as_tensor([input_ids]).to(self.device),
                     use_cache=True,
                     **image_args)
                 logits = out.logits
                 past_key_values = out.past_key_values
             else:
                 attention_mask = torch.ones(
-                    1, past_key_values[0][0].shape[-2] + 1, device="cuda")
-                out = model(input_ids=torch.as_tensor([[token]], device="cuda"),
+                    1, past_key_values[0][0].shape[-2] + 1, device=self.device)
+                out = model(input_ids=torch.as_tensor([[token]], device=self.device),
                             use_cache=True,
                             attention_mask=attention_mask,
                             past_key_values=past_key_values,

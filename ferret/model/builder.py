@@ -18,6 +18,7 @@ import pdb
 from transformers import AutoTokenizer, AutoModelForCausalLM, AutoConfig, BitsAndBytesConfig
 import torch
 from ferret.model import *
+from ferret.model.device_selector import get_device
 from ferret.constants import DEFAULT_IMAGE_PATCH_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 DEFAULT_REGION_FEA_TOKEN = "<region_fea>"
 
@@ -128,7 +129,8 @@ def load_pretrained_model(model_path, model_base, model_name, load_8bit=False, l
             else:
                 vision_tower.load_model()
 
-        vision_tower.to(device='cuda', dtype=torch.float16)
+        device = get_device()
+        vision_tower.to(device=device, dtype=torch.float16)
         image_processor = vision_tower.image_processor
 
     if hasattr(model.config, "max_sequence_length"):
