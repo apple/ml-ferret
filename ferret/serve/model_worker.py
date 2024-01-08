@@ -29,6 +29,7 @@ from ferret.mm_utils import process_images, load_image_from_base64, tokenizer_im
 from ferret.constants import IMAGE_TOKEN_INDEX, DEFAULT_IMAGE_TOKEN, DEFAULT_IM_START_TOKEN, DEFAULT_IM_END_TOKEN
 # from transformers import TextIteratorStreamer
 from threading import Thread
+from ferret.model.utils import DEVICE
 
 
 GB = 1 << 30
@@ -177,7 +178,7 @@ class ModelWorker:
 
         if region_masks is not None:
             assert self.add_region_feature
-            region_masks = [[torch.Tensor(region_mask_i).cuda().half() for region_mask_i in region_masks]]
+            region_masks = [[torch.Tensor(region_mask_i).to(DEVICE).half() for region_mask_i in region_masks]]
             image_args["region_masks"] = region_masks
             logger.info("Add region_masks to image_args.")
         else:
@@ -211,15 +212,15 @@ class ModelWorker:
         for i in range(max_new_tokens):
             if i == 0:
                 out = model(
-                    torch.as_tensor([input_ids]).cuda(),
+                    torch.as_tensor([input_ids]).to(DEVICE),
                     use_cache=True,
                     **image_args)
                 logits = out.logits
                 past_key_values = out.past_key_values
             else:
                 attention_mask = torch.ones(
-                    1, past_key_values[0][0].shape[-2] + 1, device="cuda")
-                out = model(input_ids=torch.as_tensor([[token]], device="cuda"),
+                    1, past_key_values[0][0].shape[-2] + 1, device=DEVICE)
+                out = model(input_ids=torch.as_tensor([[token]], device=DEVICE),
                             use_cache=True,
                             attention_mask=attention_mask,
                             past_key_values=past_key_values,
