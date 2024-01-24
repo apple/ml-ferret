@@ -64,7 +64,8 @@ pip install protobuf==3.20.0
 3. Install additional packages for training cases
 ```
 pip install ninja
-pip install flash-attn --no-build-isolation
+pip install tensorboard
+pip install flash-attn==1.0.7 --no-build-isolation
 ```
 
 
