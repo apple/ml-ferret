@@ -555,6 +555,7 @@ def draw(input_mode, input, refer_input_state, refer_text_show, imagebox_refer):
 
     diff_mask = mask_new - last_mask
     if mask_new.sum() == 0:
+        refer_input_state['refer_text_show'].append(refer_text_show)
         return (refer_input_state, refer_text_show, image)
     elif torch.all(diff_mask == 0):
         return (refer_input_state, refer_input_state['refer_text_show'][-1], refer_input_state['imagebox_refer'][-1])
