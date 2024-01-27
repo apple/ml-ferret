@@ -616,6 +616,7 @@ def build_demo(embed_mode):
     textbox = gr.Textbox(show_label=False, placeholder="Enter text and press ENTER", visible=False, container=False)
     with gr.Blocks(title="FERRET", theme=gr.themes.Base(), css=css) as demo:
         state = gr.State()
+        state.skip_next = False
 
         if not embed_mode:
             gr.Markdown(title_markdown)
