@@ -34,7 +34,6 @@ def rand_sample(x, max_len):
 def rand_sample_repeat(x, max_len):
     if x.shape[0] < max_len:
         indices = torch.randint(0, x.shape[0], (max_len-x.shape[0],))
-        # pdb.set_trace()
         return torch.cat((x, x[indices]), dim=0)
     elif x.shape[0] == max_len:
         return x
@@ -62,7 +61,6 @@ def point_sample(input, point_coords, return_dtype, **kwargs):
     if point_coords.dim() == 3:
         add_dim = True
         point_coords = point_coords.unsqueeze(2)
-    # output = F.grid_sample(input, 2.0 * point_coords - 1.0, **kwargs)
     output = F.grid_sample(input.float(), (2.0 * point_coords - 1.0).float(), **kwargs)
     output = output.to(return_dtype)
     if add_dim:
@@ -211,7 +209,6 @@ class GeoRegionSampler(nn.Module):
 
         self.norm_init_weights()
 
-    #  self.dtype = torch.float32
     def norm_init_weights(self):
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -235,7 +232,6 @@ class GeoRegionSampler(nn.Module):
                 # (w, h)
                 ori_image_wh = torch.tensor([region_masks_list_i[0].shape[0], region_masks_list_i[0].shape[1]], device=region_masks_list_i[0].device)[None,]
                 # list of elements of shape [num_sample_point, 2] 
-                # pdb.set_trace()
                 cur_non_zero_pos = [rand_sample_repeat((m.nonzero()/ori_image_wh), self.num_init_point) for m in region_masks_list_i]
                 # list -> [num_mask, num_sample_point, 2]
                 cur_non_zero_pos = torch.stack(cur_non_zero_pos)
@@ -252,7 +248,6 @@ class GeoRegionSampler(nn.Module):
                                                 return_dtype,
                                                 align_corners=True,
                                                 )
-                # region_feature_i = region_feature_i.to(dup_region_feature_map_i.dtype)
                 region_feature_i = region_feature_i.transpose(-2, -1)
 
                 cur_img_ids = [img_idx] * len(cur_non_zero_pos)
@@ -261,7 +256,6 @@ class GeoRegionSampler(nn.Module):
                 all_points_fea.append(region_feature_i)
                 all_points_img_ids.extend(cur_img_ids)
 
-        # pdb.set_trace()
         # No region found, return list of None.
         if len(all_points) == 0:
             return [None] * len(region_masks)
@@ -269,7 +263,6 @@ class GeoRegionSampler(nn.Module):
         all_points = torch.cat(all_points, dim=0).to(return_dtype)  # [B*num_mask, num_sample_point, 2]
         all_points_fea = torch.cat(all_points_fea, dim=0)  # [B*num_mask, num_sample_point, C]
         all_points_img_ids = torch.tensor(all_points_img_ids, device=all_points_fea.device)
-        # pdb.set_trace()
         assert all_points_fea.shape[:-1] == all_points_fea.shape[:-1]
         
         # Processing.
@@ -287,7 +280,6 @@ class GeoRegionSampler(nn.Module):
             grouped_points = index_points(all_points, idx)  # [B, npoint, k, 2]
             grouped_points_fea = index_points(all_points_fea, idx)  # [B, npoint, k, d]
 
-            # pdb.set_trace()
             local_points_fea = torch.cat([grouped_points_fea, grouped_points],dim=-1)  # [B, npoint, k, d+2]
             anchor_points_fea = torch.cat([new_points_fea, new_points],dim=-1).unsqueeze(-2)
             diff_points_fea = local_points_fea-anchor_points_fea
@@ -295,23 +287,17 @@ class GeoRegionSampler(nn.Module):
             diff_points_fea = self.diff_projector_list[stage_i](diff_points_fea)
             gather_points_fea = torch.cat([diff_points_fea, anchor_points_fea.repeat(1, 1, cur_num_neighbor, 1)], dim=-1)  # [B, npoint, k, 2(d+2)]
 
-            # pdb.set_trace()
             b, n, s, d = gather_points_fea.size() 
             gather_points_fea = gather_points_fea.permute(0, 1, 3, 2)   # [B, npoint, 2(d+2), k]
             gather_points_fea = gather_points_fea.reshape(-1, d, s)   # [B*npoint, 2(d+2), k]
             gather_points_fea = self.agg_projector_list[stage_i](gather_points_fea) # [B*npoint, d, k]
-            # pdb.set_trace()
             batch_size, new_dim, _ = gather_points_fea.size()
             gather_points_fea = self.pooler_list[stage_i](gather_points_fea).view(batch_size, new_dim) # [B*npoint, d]
-            # gather_points_fea = F.adaptive_max_pool1d(gather_points_fea, 1).view(batch_size, -1) # [B*npoint, d]
-            # pdb.set_trace()
             gather_points_fea = gather_points_fea.reshape(b, n, -1)     # [B, npoint, d]
-            # pdb.set_trace()
 
             all_points = new_points
             all_points_fea = gather_points_fea
 
-        # pdb.set_trace()
         x = all_points_fea.flatten(1, -1)  # [B, npoint x d]
         x = self.flatten_projector(x)
         all_region_fea = self.dim_projector(x)  # [B, d]
@@ -319,13 +305,11 @@ class GeoRegionSampler(nn.Module):
         output_region_fea = []
         for img_idx in range(len(region_masks)):
             cur_mask = all_points_img_ids == img_idx
-            # pdb.set_trace()
             if not cur_mask.any():
                 output_region_fea.append(None)
             else:
                 output_region_fea.append(all_region_fea[cur_mask])
 
-        # pdb.set_trace()
         return output_region_fea
 
 
@@ -344,7 +328,6 @@ class FERRETMetaModel:
             self.region_fea_adapter = nn.Linear(config.mm_hidden_size, config.hidden_size)
 
         if hasattr(config, "region_geo_sampler"):
-            # pdb.set_trace()
             self.region_geo_sampler = GeoRegionSampler(input_dim=config.mm_hidden_size,
                                                        output_dim=config.hidden_size,
                                                        num_init_point=self.max_sample_point,
@@ -386,7 +369,6 @@ class FERRETMetaModel:
             if region_geo_sampler:
                 self.config.region_geo_sampler = True
                 self.config.sampler_pooler_mode = sampler_pooler_mode
-                # pdb.set_trace()
                 if not hasattr(self, 'region_geo_sampler'):
                     self.region_geo_sampler = GeoRegionSampler(input_dim=self.config.mm_hidden_size,
                                                             output_dim=self.config.hidden_size,
@@ -454,7 +436,6 @@ class FERRETMetaForCausalLM(ABC):
                 # [num_mask, C, H, W] x [num_mask, num_sample_point(padded), 2] -> [num_mask, C, num_sample_point(padded)]
                 # F.grid_sample doesn't support BF16. Need to tranform into float32 then transform back.
                 dup_region_feature_map_i_ori_type = dup_region_feature_map_i.to(original_dtype)
-                # pdb.set_trace()
                 region_feature_i = point_sample(dup_region_feature_map_i_ori_type, 
                                                 non_zero_pos.flip(dims=(2,)).type(original_dtype), 
                                                 return_dtype, 
@@ -487,7 +468,6 @@ class FERRETMetaForCausalLM(ABC):
             assert region_flag == False
             concat_images = torch.cat([image for image in images], dim=0)
             raw_image_features, image_features, region_feature_map = self.encode_images(concat_images, region_flag, region_geo_sampler)
-            # image_features = self.encode_images(concat_images)
             split_sizes = [image.shape[0] for image in images]
             image_features = torch.split(image_features, split_sizes, dim=0)
             image_features = [x.flatten(0, 1) for x in image_features]
@@ -496,7 +476,6 @@ class FERRETMetaForCausalLM(ABC):
 
         if region_flag:
             if region_geo_sampler:
-                # pdb.set_trace()
                 region_features = self.get_model().region_geo_sampler(region_feature_map, region_masks, 
                                                                       original_dtype=raw_image_features.dtype,
                                                                       return_dtype=image_features.dtype)
@@ -567,12 +546,8 @@ class FERRETMetaForCausalLM(ABC):
                 if region_flag and region_features[batch_idx] is not None:
                     region_embs = torch.zeros_like(text_input_embeds)
                     region_replace_mask = (cur_input_ids == self.config.im_region_fea_token)
-                    # pdb.set_trace()
                     region_embs[region_replace_mask] = region_features[batch_idx].to(text_input_embeds.dtype)
-                    text_input_embeds = text_input_embeds * (~region_replace_mask).to(text_input_embeds.dtype)[:, None] + region_embs                    
-                    # print('region_embs[..., 0].nonzero()', region_embs[..., 0].nonzero())
-                    # raise NotImplementedError()
-                    # pdb.set_trace()
+                    text_input_embeds = text_input_embeds * (~region_replace_mask).to(text_input_embeds.dtype)[:, None] + region_embs
                 else:
                     if hasattr(self.config, 'im_region_fea_token'):
                         assert (cur_input_ids == self.config.im_region_fea_token).sum() == 0
