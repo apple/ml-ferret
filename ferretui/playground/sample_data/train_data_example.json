@@ -1,0 +1,83 @@
+[
+    {
+        "id": 0,
+        "image": "appstore_reminders.png",
+        "image_h": 2532,
+        "image_w": 1170,
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\nWhat's the UI type of the widget <bbox_location0>?"
+            },
+            {
+                "from": "gpt",
+                "value": "Button"
+            }
+        ],
+        "box_x1y1x2y2": [
+            [
+                [
+                    445,
+                    524,
+                    692,
+                    632
+                ]
+            ],
+            []
+        ]
+    },
+    {
+        "id": 1,
+        "image": "appstore_reminders.png",
+        "image_h": 2532,
+        "image_w": 1170,
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\nIdentify the icon type of the widget <bbox_location0>?"
+            },
+            {
+                "from": "gpt",
+                "value": "launch"
+            }
+        ],
+        "box_x1y1x2y2": [
+            [
+                [
+                    1035,
+                    540,
+                    1114,
+                    622
+                ]
+            ],
+            []
+        ]
+    },
+    {
+        "id": 2,
+        "image": "appstore_reminders.png",
+        "image_h": 2532,
+        "image_w": 1170,
+        "conversations": [
+            {
+                "from": "human",
+                "value": "<image>\nWhat text is displayed in the element <bbox_location0>?"
+            },
+            {
+                "from": "gpt",
+                "value": "Reminders, Don't forget. User Reminders"
+            }
+        ],
+        "box_x1y1x2y2": [
+            [
+                [
+                    447,
+                    273,
+                    1054,
+                    425
+                ]
+            ],
+            []
+        ]
+    }
+]

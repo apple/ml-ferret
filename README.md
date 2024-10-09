@@ -12,9 +12,16 @@ Brief description of the project.
 
 *An End-to-End MLLM that Accept Any-Form Referring and Ground Anything in Response.* [[Paper](https://arxiv.org/abs/2310.07704)]
 
-[Haoxuan You*](https://hxyou.github.io/), [Haotian Zhang*](https://haotian-zhang.github.io/), [Zhe Gan](https://zhegan27.github.io/), [Xianzhi Du](https://scholar.google.com/citations?user=l1hP40AAAAAJ&hl=en), [Bowen Zhang](https://zbwglory.github.io/), [Zirui Wang](https://www.cs.cmu.edu/~ziruiw/), [Liangliang Cao](http://llcao.net/), [Shih-Fu Chang](https://www.ee.columbia.edu/~sfchang/), [Yinfei Yang](https://sites.google.com/site/yinfeiyang/) 
+[Haoxuan You*](https://hxyou.github.io/), [Haotian Zhang*](https://scholar.google.com/citations?user=1vz0kKUAAAAJ&hl=en/), [Zhe Gan](https://zhegan27.github.io/), [Xianzhi Du](https://scholar.google.com/citations?user=l1hP40AAAAAJ&hl=en), [Bowen Zhang](https://zbwglory.github.io/), [Zirui Wang](https://www.cs.cmu.edu/~ziruiw/), [Liangliang Cao](http://llcao.net/), [Shih-Fu Chang](https://www.ee.columbia.edu/~sfchang/), [Yinfei Yang](https://sites.google.com/site/yinfeiyang/) 
 [*: equal contribution]
 
+
+## Release
+- [10/08/2024] 🔥 We release the [Ferret-UI](ferretui/), the first UI-centric MLLM that is capable of effectively executing **referring, grounding, and reasoning** tasks.
+- [07/10/2024] 🔥 [Ferret-v2](https://arxiv.org/abs/2404.07973) is accepted to COLM 2024. 
+- [02/15/2024] 🔥 Ferret is accepted to ICLR 2024 as a [Spotlight](https://iclr.cc/virtual/2024/poster/19537)!!! 
+- [12/14/2023] 🔥 We release the Ferret [checkpoints(7B, 13B)](#checkpoints).
+- [10/30/2023] 🔥 We release the code of **FERRET** model and [Ferret-Bench](ferret/eval/ferret_gpt4_data).
 
 ## Overview
 
@@ -27,12 +34,6 @@ Key Contributions:
 * Ferret Model - **Hybrid Region Representation + Spatial-aware Visual Sampler** enable fine-grained and open-vocabulary referring and grounding in MLLM.
 * GRIT Dataset (~1.1M) - A **Large-scale, Hierarchical, Robust** ground-and-refer instruction tuning dataset.
 * Ferret-Bench - A multimodal evaluation benchmark that jointly requires **Referring/Grounding, Semantics, Knowledge, and Reasoning**.
-
-
-## Release
-- [12/14] 🔥 We released the [checkpoints(7B, 13B)](#checkpoints).
-- [10/30] 🔥 We released the code of **FERRET** model and [Ferret-Bench](ferret/eval/ferret_gpt4_data).
-
 
 
 **Usage and License Notices**: The data, and code is intended and licensed for research use only. They are also restricted to uses that follow the license agreement of LLaMA, Vicuna and GPT-4. The dataset is CC BY NC 4.0 (allowing only non-commercial use) and models trained using the dataset should not be used outside of research purposes. 

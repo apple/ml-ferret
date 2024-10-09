@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ferretui"
+version = "1.0.0"
+description = "Ferret-UI: Grounded Mobile UI Understanding with Multimodal LLMs"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: Apache Software License",
+]
+dependencies = [
+    "torch==2.2.0", "torchvision==0.16.2",
+    "transformers==4.39.0", "tokenizers==0.15.1", "sentencepiece==0.1.99", "shortuuid",
+    "accelerate==0.27.2", "peft==0.4.0", "bitsandbytes==0.41.0",
+    "pydantic<2,>=1", "markdown2[all]", "numpy", "scikit-learn==1.5.0",
+    "gradio==4.31.3", "gradio_client==0.2.9",
+    "requests", "httpx==0.24.0", "uvicorn", "fastapi", "wandb", "pycocotools",
+    "einops==0.6.1", "einops-exts==0.0.4", "timm==0.9.16", "openpyxl",
+    "deepspeed==0.11.1", "openai==0.28.0","spacy==3.7.0", "nltk==3.9", "jsonlines",
+    "open_clip_torch==2.24.0"
+]
+
+[project.optional-dependencies]
+train = ["deepspeed==0.11.1", "ninja", "wandb"]
+build = ["build", "twine"]
+
+[project.urls]
+"Homepage" = "https://github.com/apple/ml-ferret"
+
+[tool.setuptools.packages.find]
+exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*", "data*", "model_zoo*", "work_dirs*", "project*"]
+
+[tool.wheel]
+exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*", "data*", "model_zoo*", "work_dirs*", "project*"]
+
+[tool.pyright]
+exclude = ["assets*", "benchmark*", "docs", "dist*", "playground*", "scripts*", "tests*", "data*", "model_zoo*", "work_dirs*", "project*", "dataset*"]
