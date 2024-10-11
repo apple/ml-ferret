@@ -41,7 +41,7 @@ class Conversation:
                 messages.insert(0, (self.roles[0], "<Image><image></Image>"))
                 messages.insert(1, (self.roles[1], "Received."))
             else:
-                messages[0] = (init_role, "<image>\n" + init_msg)
+                messages[0] = (init_role, f"<image>\n{init_msg}")
 
         if self.sep_style == SeparatorStyle.SINGLE:
             ret = self.system + self.sep
@@ -49,9 +49,9 @@ class Conversation:
                 if message:
                     if type(message) is tuple:
                         message, _, _ = message
-                    ret += role + ": " + message + self.sep
+                    ret += f"{role}: {message}{self.sep}"
                 else:
-                    ret += role + ":"
+                    ret += f"{role}:"
         elif self.sep_style == SeparatorStyle.TWO:
             seps = [self.sep, self.sep2]
             ret = self.system + seps[0]
@@ -59,9 +59,9 @@ class Conversation:
                 if message:
                     if type(message) is tuple:
                         message, _, _ = message
-                    ret += role + ": " + message + seps[i % 2]
+                    ret += f"{role}: {message}{seps[i % 2]}"
                 else:
-                    ret += role + ":"
+                    ret += f"{role}:"
         elif self.sep_style == SeparatorStyle.MPT:
             ret = self.system + self.sep
             for role, message in messages:
@@ -88,7 +88,7 @@ class Conversation:
                         message = wrap_inst(message)
                         ret += self.sep + message
                     else:
-                        ret += " " + message + " " + self.sep2
+                        ret += f" {message} {self.sep2}"
                 else:
                     ret += ""
             ret = ret.lstrip(self.sep)
